@@ -1,0 +1,8 @@
+<%= simple_form_for([@group_purchase, @group_purchase.comments.build]) do |f| %>
+  <p>
+    <%= f.text_area :body ,:cols => 20, :rows => 3%>
+  </p>
+  <p>
+    <%= f.submit :class=> "btn"%>
+  </p>
+<% end %>

@@ -1,0 +1,16 @@
+<p>
+	<strong>Commenter:</strong>
+	<%= comment.commenter %>
+</p>
+<p>
+	<strong>Comment:</strong>
+	<%= comment.body %>
+</p>
+<% if @group_purchase.creditor == current_member or comment.commenter == current_member.email%>
+	<p>
+	  <%= link_to 'Delete Comment', [comment.group_purchase, comment],
+	               method: :delete,
+	               data: { confirm: 'Are you sure?' } %>
+	</p>
+<% end %>
+<br>

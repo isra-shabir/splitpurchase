@@ -1,0 +1,25 @@
+<h1>Money Owed to You</h1>
+<table>
+	<th>Purchase Name</th>
+	<th>Balance</th>
+	<%= @purchases_creditor.each do |purchase| %>
+		<tr>
+			<td><%=purchase.purchaseName%></td>
+			<td><%=number_with_precision(purchase.balance, :precision => 2)%></td>
+	</tr>
+	<%end%>
+</table>
+
+<h1>Money You Owe</h1>
+<table>
+	<th>Purchase</th>
+	<th>Balance</th>
+	<%=@purchases_debitor.each do |purchase| %>
+		<tr>
+			<td><%=purchase.purchaseName%></td>
+			<td><%=number_with_precision(purchase.balance, :precision => 2)%></td>
+		</tr>
+	<%end%>
+</table>
+
+<%= link_to "Create New Purchase", new_group_purchase_path%>

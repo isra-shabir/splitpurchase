@@ -1,0 +1,28 @@
+<%= link_to "Split Purchases", root_path, :class => 'brand' %>
+<ul class="nav">
+  <% if member_signed_in? %>
+    <li>
+    <%= link_to('Logout', destroy_member_session_path, :method=>'delete') %>
+    </li>
+  <% else %>
+    <li>
+    <%= link_to('Login', new_member_session_path)  %>
+    </li>
+  <% end %>
+  <% if member_signed_in? %>
+    <li>
+    <%= link_to('Edit User Account', edit_member_registration_path) %>
+    </li>
+  <% else %>
+    <li>
+    <%= link_to('Sign up', new_member_registration_path)  %>
+    </li>
+  <% end %>
+</ul>
+<% if member_signed_in? %>
+  <ul class="nav pull-right">
+    <li>
+      <%= link_to(current_member.email, root_path) %>
+    </li>
+  </ul>
+<% end %>

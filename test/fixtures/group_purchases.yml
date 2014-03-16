@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+# primary author: Kevin
+one:
+  purchaseName: Purchase1
+  creatorName: kwhite17@mit.edu
+  balance: 1.51
+
+two:
+  purchaseName: Purchase2
+  creatorName: rene.miller3@gmail.com
+  balance: 3.05

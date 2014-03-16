@@ -1,0 +1,78 @@
+  <%= simple_form_for(@payment_account) do |f| %>
+  <%= f.error_notification %>
+
+  <% @payment_account.errors.full_messages.each do |msg| %>
+    <p><%= msg %></p>
+  <% end %>
+
+  <span class="payment-errors"></span>
+  
+  <div class="form-inputs charge">
+    <%= label_tag :card_number %>
+    <%= text_field_tag :card_number, nil, name: nil %>
+
+    <%= label_tag :cvc, "Security code (CVV)" %>
+    <%= text_field_tag :cvc, nil, name: nil %>
+
+    <%= label_tag :expiry_date %>
+    <%= date_select "", :expiry_date, {:discard_day => true, :order => [:month, :year], :use_month_numbers => true, :start_year => Date.today.year, :end_year => Date.today.year + 25}, {:class => "small"} %>
+
+    <%= f.label :name, "Full Name" %>
+    <%= f.text_field :name %>
+
+    <%= f.label :routing_number %>
+    <%= f.text_field :routing_number %>
+
+    <%= f.label :account_number %>
+    <%= f.text_field :account_number %>
+
+    <%= f.label :country %>
+    <%= f.text_field :country, value: "US" %>
+  </div>
+  
+  <div>
+    <%= f.button :submit %>
+  </div>
+  
+<% end %>
+
+<script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+
+<script>
+
+  Stripe.setPublishableKey("pk_test_3PP6j4HwXoUuWXwxEsEAAWYs");
+
+  var stripeResponseHandler = function(status, response) {
+    var $form = $('#new_payment_account');
+
+    if (response.error) {
+      // Show the errors on the form
+      $form.find('.payment-errors').text(response.error.message);
+      $form.find('button').prop('disabled', false);
+    } else {
+      // token contains id, last4, and card type
+      var token = response.id;
+      // Insert the token into the form so it gets submitted to the server
+      $form.append($('<input type="hidden" name="charge_token" />').val(token));
+      // and re-submit
+      $form.get(0).submit();
+    }
+  };
+
+  $('#new_payment_account').submit(function(e) {
+    var $form = $(this);
+
+    // Disable the submit button to prevent repeated clicks
+    $form.find('button').prop('disabled', true);
+
+    Stripe.card.createToken({
+        number:     $("#card_number").val(),
+        cvc:        $("#cvc").val(),
+        exp_month:  $("select#_expiry_date_2i").val(),
+        exp_year:   $("select#_expiry_date_1i").val()
+    }, stripeResponseHandler);
+
+    // Prevent the form from submitting with the default action
+    return false;
+  });
+</script>

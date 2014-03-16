@@ -1,0 +1,35 @@
+  <%= simple_form_for(@payment_account) do |f| %>
+  <%= f.error_notification %>
+
+  <% @payment_account.errors.full_messages.each do |msg| %>
+    <p><%= msg %></p>
+  <% end %>
+
+  <span class="payment-errors"></span>
+
+  <div class="alert alert-error">We have a credit card for you on file. <br />
+  If you want to edit the card, please destroy this payment account, and set it up again with the new information.
+  </div>
+
+  <div class="form-inputs charge">
+
+    <%= f.label :name, "Full Name" %>
+    <%= f.text_field :name %>
+
+    <%= f.label :routing_number %>
+    <%= f.text_field :routing_number %>
+
+    <%= f.label :account_number %>
+    <%= f.text_field :account_number %>
+
+    <%= f.label :country %>
+    <%= f.text_field :country, value: "US" %>
+  </div>
+  
+  <div>
+    <%= f.button :submit %>
+  </div>
+  
+<% end %>
+
+<%= link_to 'Delete Account', @payment_account, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %>

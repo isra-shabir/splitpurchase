@@ -1,0 +1,70 @@
+<% if @group_purchase.creditor == current_member %>
+	<% unless @group_purchase.unallocated_balance==0 %>
+		<%= link_to 'Add a Debitor', new_group_purchase_invoice_path(@group_purchase), :class=>"btn btn-primary btn-small"%> 
+	<% end %>
+	<%= link_to 'Return to Personal Page', members_index_path, :class=>"btn btn-small" %> 
+	<%= link_to 'Delete Purchase', @group_purchase, method: :delete, data: {confirm: 'Are you sure'} , :class=>"btn btn-danger btn-small"%>
+<% else %>
+	<%= link_to 'Return to Personal Page', members_index_path, :class=>"btn btn-small" %> 
+<% end %>
+
+<h3>Purchase Name:
+<%= @group_purchase.purchaseName %>
+</h3>
+<% unless current_member == @group_purchase.creditor %>
+	<h4>You owe: $<%= number_with_precision(@group_purchase.get_invoice_balance(current_member), :precision =>2) %>
+<% end %>
+</h4>
+<br>
+<p>
+  <b>Total purchase amount:</b>
+  $<%= number_with_precision(@group_purchase.balance, :precision => 2) %>
+</p>
+<% if current_member == @group_purchase.creditor %>
+	<p>
+	  <b>Unallocated Balance:</b>
+	  $<%= number_with_precision(@group_purchase.unallocated_balance, :precision => 2) %>
+	</p>
+<% end %>
+<p>
+	<b>Creditor:</b>
+	<%= @group_purchase.creditor.email%></li>
+</p>
+<% if current_member == @group_purchase.creditor %>
+	<% if @debtors.any? %>
+	<p>
+		<b>The following people owe you money:</b>
+		<ul>
+			<% @debtors.each do |debtor| %>
+				<li><%=debtor.email%> - $<%= number_with_precision(@group_purchase.get_invoice_balance(debtor), :precision => 2)%></li>
+			<% end %>
+		</ul>
+	</p>
+	<% else %>
+	<p id="noMembers">
+		Currently, no one has been notified that they owe you money. <br>Please add friends to this purchase to get your money back!
+	</p>
+	<% end %>
+<% else %>
+	<% if @other_debtors.any? %>
+		<p>
+			<b>The following people also owe money:</b>
+			<ul>
+				<% @other_debtors.each do |debtor| %>
+					<li><%=debtor.email%> - $<%= number_with_precision(@group_purchase.get_invoice_balance(debtor), :precision => 2)%></li>
+				<% end %>
+			</ul>
+		</p>
+	<% else %>
+	<p>
+		You are the only person who owes money. 
+	</p>
+	<% end %>
+<% end %>
+<br>
+
+<h3>Comments</h3>
+<%= render @group_purchase.comments %>
+ 
+<h4>Add a comment:</h4>
+<%= render "comments/form" %>

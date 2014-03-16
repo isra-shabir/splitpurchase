@@ -1,0 +1,27 @@
+<h1>Listing group_purchases</h1>
+<table>
+  <tr>
+    <td> Balance</td>
+    <td><%=@group_purchase.balance%></td>
+  </tr>
+</table>
+<table>
+  <tr>
+    <th>Name</th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+<% @group_purchase.members.each do |member| %>
+  <tr>
+    <td><%=member.email%></td>
+    <td><%=member.balance%></td>
+    <td><%= link_to 'Destroy', controller: "invoices", action: "destroy", id: Invoice.where(name: member.email).first, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'Add a member', new_invoice_path %>

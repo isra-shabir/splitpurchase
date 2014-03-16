@@ -1,0 +1,60 @@
+<div class="jumbotron">
+  <% if current_member.has_payment_account? %>
+  <%= link_to('Edit Payment Account', edit_payment_account_path(@payment_account), :class=>"btn btn-info") %>
+  <% else %>
+  <%= link_to('New Payment Account', new_payment_account_path, :class=>"btn btn-warning") %>
+  <% end %>
+
+  <%= link_to "Create New Purchase", new_group_purchase_path, :class=>"btn btn-primary"%>
+  <h3>Money Owed to You</h3>
+  <% if !@purchases_creditor.nil? %>
+    <table class="table">
+      <th>Purchase Name</th>
+      <th>Balance</th>
+      <% @purchases_creditor.each do |purchase| %>
+        <tr>
+          <td><%=link_to purchase.purchaseName,group_purchase_path(purchase)%></td>
+          <td><%=number_with_precision(purchase.balance, :precision => 2)%></td>
+        </tr>
+      <%end%>
+    </table>
+    <% else %>
+      You have not created any group purchases yet. No one owes you money.
+    <% end %>
+
+  <h3>Money You Owe</h3>
+  <% if !@invoices_debitor.nil?%>
+  <table class="table">
+    <th>Purchase Name</th>
+    <th>Balance</th>
+      <% @invoices_debitor.each do |invoice| %>
+      <tr>
+        <td><%=link_to invoice.group_purchase.purchaseName,group_purchase_path(invoice.group_purchase)%></td>
+        <td><%= number_with_precision(invoice.balance, :precision => 2)%></td>
+        <% if !@payment_account.nil?%>
+          <td><%= link_to "Pay", transfer_payment_account_path(id: @payment_account.id, invoice_id: invoice.id), method: :post, class: "btn-primary, btn-large" %>
+          </td>
+        <% end %>
+      </tr>
+    <%end%>
+  </table>
+  <% else %>
+  You do not owe anyone money.
+  <% end %>
+
+  <h3>Money You Paid</h3>
+  <% if !@invoices_debited.nil?%>
+    <table class="table">
+      <th>Purchase Name</th>
+      <th>Balance</th>
+        <% @invoices_debited.each do |invoice| %>
+        <tr>
+          <td><%= invoice.group_purchase.purchaseName %></td>
+          <td><%=invoice.balance%></td>
+        </tr>
+      <%end%>
+    </table>
+    <% else %>
+    You have not made any payments yet.
+    <% end %>
+</div>

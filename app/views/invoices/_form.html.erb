@@ -1,0 +1,29 @@
+<%= simple_form_for(@invoice, :url => group_purchase_invoices_path(@group_purchase)) do |f| %>
+  <% if @invoice.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@invoice.errors.count, "error") %> prohibited this invoice from being saved:</h2>
+
+      <ul>
+      <% @invoice.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label "Please enter the email address of the debtor" %><br />
+    <%= f.text_field :debtor %>
+    <br>
+    <div>Please enter the amount that this person owes.
+    <br> 
+    <% unless @invoice.errors.any? %>The maximum value is the current balance of the group: $<%= number_with_precision(@group_purchase.unallocated_balance, :precision => 2) %>
+    <% end %>
+    </div>
+    <br/>
+    <b>$ </b><%= f.number_field :balance ,:step=>".01",:max=>@group_purchase.unallocated_balance ,:min=>"0"%>
+  </div>
+  <div class="actions">
+    <%= f.submit "Create Invoice", :class=>"btn" %>
+  </div>
+<% end %>
