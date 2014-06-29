@@ -8,8 +8,7 @@ Kwhite17IsraShabirIsabellatrombaProj3::Application.routes.draw do
   devise_for :members
 
   resources :group_purchases do
-    resources :invoices
-    resources :comments
+    resources :invoices, :comments
   end
 
   resources :payment_accounts do
